@@ -275,3 +275,6 @@ Kartik Shrivastava
 
 # License
 This project is developed for educational and organizational use.
+
+<img width="1918" height="1013" alt="image" src="https://github.com/user-attachments/assets/5f49a849-563b-4845-a05e-1b85c2734a6e" />
+
