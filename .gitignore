@@ -1,0 +1,16 @@
+venv/
+backend/venv/
+
+__pycache__/
+*.pyc
+
+uploads/
+outputs/
+temp/
+extracted_text/
+
+.cache/
+
+*.index
+
+.env
