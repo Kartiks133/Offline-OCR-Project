@@ -52,7 +52,8 @@ async function convertPDF() {
 
         a.remove();
 
-        status.innerText = "Conversion Completed Successfully!";
+        status.innerText =
+            "Conversion Completed Successfully!";
 
     }
 
@@ -61,6 +62,74 @@ async function convertPDF() {
         console.error(error);
 
         status.innerText = "Conversion Failed.";
+
+    }
+
+}
+
+
+/* =========================
+   CHATBOT FUNCTION
+========================= */
+
+async function askQuestion() {
+
+    const questionInput = document.getElementById(
+        "questionInput"
+    );
+
+    const answerBox = document.getElementById(
+        "answerBox"
+    );
+
+    const question = questionInput.value;
+
+    if (!question) {
+
+        alert("Please enter a question.");
+
+        return;
+
+    }
+
+    try {
+
+        answerBox.innerText =
+            "AI is thinking...";
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/chat",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    question: question
+                })
+            }
+        );
+
+        if (!response.ok) {
+
+            throw new Error("Chat request failed");
+
+        }
+
+        const data = await response.json();
+
+        answerBox.innerText = data.answer;
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        answerBox.innerText =
+            "Failed to get AI response.";
 
     }
 
