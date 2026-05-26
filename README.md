@@ -1,55 +1,22 @@
-# Secure Offline OCR PDF Converter
+# Offline OCR + Local AI PDF Assistant
 
-A fully offline OCR-based PDF to editable DOCX conversion system designed for privacy-sensitive environments such as PSU organizations, government offices, and secure internal networks.
+A fully offline and privacy-focused OCR + AI document assistant built using FastAPI, Tesseract OCR, FAISS, Sentence Transformers, Ollama, and Phi-3.
 
-This application converts scanned PDF documents into editable Microsoft Word (.docx) files without using any online APIs or cloud services.
+This project extracts text from scanned PDFs, converts them into searchable semantic embeddings, and allows users to chat with documents locally — without using any cloud APIs.
 
 ---
 
 # Features
 
-- Fully Offline OCR Processing
-- PDF to Editable DOCX Conversion
-- Local File Processing
-- No Cloud APIs
-- No Internet Dependency
-- Secure Document Handling
-- Multi-page PDF Support
-- Modern User Interface
-- Automatic DOCX Download
-
----
-
-# Problem Statement
-
-Many OCR solutions available online require documents to be uploaded to cloud servers or third-party APIs. This creates security and privacy concerns for organizations handling confidential or sensitive documents.
-
-This project solves that problem by ensuring:
-
-- All processing occurs locally
-- No data leaves the user's machine
-- No external APIs are used
-- No online OCR services are involved
-
----
-
-# System Workflow
-
-```text
-Scanned PDF
-      ↓
-PDF Upload
-      ↓
-PDF to Image Conversion
-      ↓
-Tesseract OCR Extraction
-      ↓
-Text Processing
-      ↓
-DOCX Generation
-      ↓
-Editable Word File Download
-```
+- Offline OCR PDF processing
+- Local AI-powered PDF chat
+- Semantic document search
+- FAISS vector retrieval
+- Local LLM integration using Ollama
+- Privacy-first architecture
+- No OpenAI or cloud dependency
+- FastAPI backend
+- Interactive frontend UI
 
 ---
 
@@ -64,32 +31,36 @@ Editable Word File Download
 - FastAPI
 - Python
 
-## OCR Engine
+## OCR
 - Tesseract OCR
-
-## PDF Processing
-- Poppler
 - pdf2image
 
-## Document Generation
-- python-docx
+## AI / NLP
+- Sentence Transformers
+- FAISS
+- Ollama
+- Phi-3
 
 ---
 
 # Project Architecture
 
 ```text
-Frontend (HTML/CSS/JS)
-            ↓
-FastAPI Backend
-            ↓
-PDF Processing Engine
-            ↓
-Tesseract OCR Engine
-            ↓
-DOCX Generation
-            ↓
-Editable Word Output
+PDF Upload
+    ↓
+OCR Extraction
+    ↓
+Structured JSON Storage
+    ↓
+Chunking
+    ↓
+Embeddings
+    ↓
+FAISS Vector Search
+    ↓
+Local LLM (Phi-3)
+    ↓
+AI Response
 ```
 
 ---
@@ -100,47 +71,51 @@ Editable Word Output
 Offline-OCR-Project/
 │
 ├── backend/
-│   ├── main.py
+│   ├── retrieval/
+│   │   ├── chunker.py
+│   │   ├── embedder.py
+│   │   ├── generate_answer.py
+│   │   ├── metadata_store.py
+│   │   ├── search.py
+│   │   └── vector_store.py
+│   │
+│   ├── extracted_text/
 │   ├── uploads/
-│   ├── temp/
 │   ├── outputs/
-│   └── venv/
+│   ├── temp/
+│   ├── main.py
+│   └── test_retrieval.py
 │
 ├── frontend/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
 │
+├── .gitignore
+├── requirements.txt
 └── README.md
 ```
 
 ---
 
-# Installation Guide
+# Installation
 
 ## 1. Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Kartiks133/Offline-OCR-Project.git
+```
+
+```bash
+cd Offline-OCR-Project
 ```
 
 ---
 
-## 2. Backend Setup
-
-Move to backend folder:
-
-```bash
-cd backend
-```
-
-Create virtual environment:
+# 2. Create Virtual Environment
 
 ```bash
 python -m venv venv
 ```
 
-Activate virtual environment:
+## Activate Environment
 
 ### Windows
 
@@ -148,122 +123,162 @@ Activate virtual environment:
 venv\Scripts\activate
 ```
 
-Install dependencies:
+### Linux/macOS
 
 ```bash
-pip install fastapi uvicorn python-multipart
-pip install pdf2image
-pip install pytesseract
-pip install python-docx
+source venv/bin/activate
 ```
 
 ---
 
-# Required External Software
+# 3. Install Dependencies
 
-## Install Poppler
-
-Download:
-https://github.com/oschwartz10612/poppler-windows/releases/
-
-Add Poppler `bin` folder to system PATH.
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
-## Install Tesseract OCR
+# 4. Install Tesseract OCR
 
 Download:
 https://github.com/UB-Mannheim/tesseract/wiki
 
-During installation:
-- Enable "Add Tesseract to PATH"
+After installation, update this path inside `backend/main.py`:
+
+```python
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+```
 
 ---
 
-# Running the Application
+# 5. Install Ollama
+
+Download:
+https://ollama.com/
+
+---
+
+# 6. Pull Phi-3 Model
+
+```bash
+ollama run phi3
+```
+
+This downloads the local AI model.
+
+After first download, everything works fully offline.
+
+---
+
+# Running The Project
 
 ## Start Backend
 
 ```bash
 cd backend
+```
+
+```bash
 uvicorn main:app --reload
 ```
 
-Backend runs at:
+---
 
-```text
-http://127.0.0.1:8000
+## Open Frontend
+
+Open the frontend HTML file in browser.
+
+---
+
+# API Endpoints
+
+## Convert PDF
+
+```http
+POST /convert
+```
+
+Converts scanned PDFs into searchable OCR text and DOCX.
+
+---
+
+## Chat With PDF
+
+```http
+POST /chat
+```
+
+### Request
+
+```json
+{
+    "question": "What is this document about?"
+}
+```
+
+### Response
+
+```json
+{
+    "answer": "The document discusses..."
+}
 ```
 
 ---
 
-## Start Frontend
+# Privacy & Security
 
-Open:
+This project is completely offline after initial setup.
 
-```text
-frontend/index.html
-```
+No files, embeddings, prompts, or document data are sent to:
+- OpenAI
+- Google APIs
+- Cloud services
+- External servers
 
-in browser
-
-OR
-
-Use VS Code Live Server.
-
----
-
-# Usage Instructions
-
-1. Open application
-2. Select scanned PDF
-3. Click "Convert to DOCX"
-4. Wait for OCR processing
-5. Download editable Word document
+Suitable for:
+- confidential documents
+- enterprise environments
+- research labs
+- government workflows
+- privacy-sensitive processing
 
 ---
 
-# Security Advantages
+# Future Improvements
 
-- No online processing
-- No cloud uploads
-- No third-party OCR APIs
-- No external document storage
-- Suitable for confidential document handling
-
----
-
-# Current Limitations
-
-- Formatting preservation is limited
-- Table reconstruction not implemented
-- Handwriting OCR not supported
-- Multi-column parsing not implemented
-- OCR accuracy depends on scan quality
-
----
-
-# Future Enhancements
-
-- Better OCR preprocessing
-- Noise reduction
-- Table detection
-- Layout reconstruction
-- Multi-language OCR
-- Drag-and-drop upload
-- Progress tracking
+- Persistent FAISS indexing
+- Source citations with page numbers
+- Multi-document chat
+- Chat history
+- OCR preprocessing improvements
 - Dark mode UI
+- Streaming responses
+- Encrypted local storage
 
 ---
 
-# Target Use Cases
+# Screenshots
 
-- PSU Organizations
-- Government Offices
-- Legal Document Digitization
-- Archived Record Conversion
-- Internal Enterprise Document Processing
-- Secure Offline Networks
+<img width="1919" height="1015" alt="image" src="https://github.com/user-attachments/assets/ed12ca1c-4a9a-4c9b-8aaa-1efe84238cd3" />
+<img width="1607" height="363" alt="image" src="https://github.com/user-attachments/assets/f67e345e-0793-4e6b-b52b-a060c5d1d8fe" />
+
+
+
+# Architecture Diagram
+
+PDF
+ ↓
+OCR
+ ↓
+Embeddings
+ ↓
+FAISS
+ ↓
+Phi-3
+ ↓
+AI Answer
 
 ---
 
@@ -271,10 +286,7 @@ Use VS Code Live Server.
 
 Kartik Shrivastava
 
+GitHub:
+https://github.com/Kartiks133
+
 ---
-
-# License
-This project is developed for educational and organizational use.
-
-<img width="1918" height="1013" alt="image" src="https://github.com/user-attachments/assets/5f49a849-563b-4845-a05e-1b85c2734a6e" />
-
