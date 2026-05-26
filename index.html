@@ -1,4 +1,3 @@
-HTML-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,13 +24,35 @@ HTML-
             No data is uploaded online.
         </p>
 
-        <input type="file" id="pdfFile" accept=".pdf">
+        <!-- PDF Upload -->
+        <input
+            type="file"
+            id="pdfFile"
+            accept=".pdf"
+        >
 
         <button onclick="convertPDF()">
             Convert to DOCX
         </button>
 
         <p id="status"></p>
+
+        <hr>
+
+        <!-- CHAT SECTION -->
+        <h2>Ask Questions About PDF</h2>
+
+        <input
+            type="text"
+            id="questionInput"
+            placeholder="Ask something about the PDF..."
+        >
+
+        <button onclick="askQuestion()">
+            Ask
+        </button>
+
+        <div id="answerBox"></div>
 
     </div>
 
